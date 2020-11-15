@@ -1,0 +1,159 @@
+
+@startuml v1.0
+
+package usecase.xxx {
+    class xxxUsecase
+}
+note as xxxUsecaseNote
+    コンストラクタに消費税ファクトリIFを指定し
+    DIコンテナで消費税ファクトリまたは、
+    Mock消費税ファクトリが注入する
+end note
+xxxUsecase .up. xxxUsecaseNote
+
+package infrastructure.消費税 {
+    class 消費税ファクトリ
+}
+
+package mock-infrastructure.消費税 {
+    class Mock消費税ファクトリ
+}
+
+note as InfraFactoryNote
+    本番用のDBからデータを取得して
+    ドメインオブジェクトに変換、組み立て
+    消費税クラスを生成する処理を実装する
+end note
+消費税ファクトリ .up. InfraFactoryNote
+
+note as MockFactoryNote
+    テスト(スタブ)用にインメモリ(ないしローカルファイル)から
+    ドメインオブジェクトを組み立て
+    消費税クラスを生成する処理を実装する
+end note
+Mock消費税ファクトリ .up. MockFactoryNote
+
+package domain {
+
+    package 契約 {
+        class 契約日
+        class 契約区分
+        class 提供区分
+    }
+
+    package 商品 {
+        class 商品カテゴリ
+    }
+
+    package 消費税 {
+
+        消費税ファクトリIF <.. xxxUsecase: use
+        消費税ファクトリIF <|.up. 消費税ファクトリ
+        消費税ファクトリIF <|.up. Mock消費税ファクトリ
+
+        interface 消費税ファクトリIF
+        消費税ファクトリIF ..> 消費税 : create
+
+        class 消費税
+
+        note as SalesTaxNote
+            以下を消費税クラスのコンストラクタに渡す
+            * 消費税率適用ルール
+            * 契約日
+            * 対象品目候補
+        end note
+        消費税 .left. SalesTaxNote
+
+        class 施行日
+        class 消費税率
+        class 消費税率適用ルール
+
+        消費税 ..> 消費税率適用ルール
+        消費税 ..> 契約日
+        消費税 --> 消費税率
+
+        package 軽減税 {
+
+            class 軽減税
+            class 軽減税率適用条件
+
+            消費税率適用ルール --> 軽減税率適用条件 : use
+            軽減税率適用条件 "1" --> "0..*" 軽減税
+
+            軽減税 --> 施行日
+            軽減税 --> 対象品目
+            軽減税 --> 消費税率
+
+            note as RedusedSalesTaxRateApplyCondition
+                契約日、対象品目候補を指定すると
+                契約日以前に施行された最新の軽減税を探す
+
+                上記でヒットした軽減税の対象品目に
+                対象品目候補が一致する場合はその軽減税の税率を返す
+
+                ※該当する軽減税がなかった場合は、undefinedを返す
+            end note
+            軽減税率適用条件 .left. RedusedSalesTaxRateApplyCondition
+        }
+
+        package 標準税 {
+
+            class 標準税
+            class 標準税率適用条件
+
+            消費税率適用ルール --> 標準税率適用条件 : use
+            標準税率適用条件 "1" --> "0..*" 標準税
+
+            標準税 --> 施行日
+            標準税 --> 対象品目
+            標準税 --> 消費税率
+
+            note as StandardSalesTaxRateApplyCondition
+                契約日、対象品目候補を指定すると
+                契約日以前に施行された最新の標準税を探す
+
+                上記でヒットした標準税の対象品目に
+                対象品目候補が一致する場合はその標準税の税率を返す
+
+                ※該当する標準税がなかった場合は、undefinedを返す
+            end note
+            標準税率適用条件 .right. StandardSalesTaxRateApplyCondition
+        }
+
+        package 対象品目 {
+
+            class 対象品目
+            class 対象契約区分
+            class 対象商品カテゴリ
+            class 対象提供区分
+            class 対象品目候補
+
+            shared.support.合成仕様 <|--up-- 対象品目
+            shared.support.合成仕様 <|--up-- 対象契約区分
+            shared.support.合成仕様 <|--up-- 対象提供区分
+            shared.support.合成仕様 <|--up-- 対象商品カテゴリ
+
+            対象契約区分 --> 契約区分
+            対象提供区分 --> 提供区分
+            対象商品カテゴリ --> 商品カテゴリ
+
+            消費税 ..> 対象品目候補
+        }
+    }
+}
+
+package shared.support {
+
+    interface 合成仕様IF
+    class 合成仕様
+    class AND仕様
+    class OR仕様
+    class NOT仕様
+
+    合成仕様IF <|.. 合成仕様
+    合成仕様 <|-- AND仕様
+    合成仕様 <|-- OR仕様
+    合成仕様 <|-- NOT仕様
+}
+
+@enduml
