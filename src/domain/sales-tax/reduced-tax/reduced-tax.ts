@@ -1,6 +1,7 @@
 import { EnforcementDate } from "../enforcement-date";
+import { Specification } from "../../../shared/support/specification";
+import { TargetItemCandidate } from "../target-item/target-item-candidate";
 import { SalesTaxRate } from "../sales-tax-rate";
-import { TargetItem } from "../target-item/target-item";
 
 /**
  * 軽減税
@@ -11,7 +12,7 @@ export class ReducedTax {
         return this._date;
     }
 
-    public get item(): TargetItem {
+    public get item(): Specification<TargetItemCandidate> {
         return this._item;
     }
 
@@ -21,13 +22,13 @@ export class ReducedTax {
 
     private constructor(
         private readonly _date: EnforcementDate,
-        private readonly _item: TargetItem,
+        private readonly _item: Specification<TargetItemCandidate>,
         private readonly _rate: SalesTaxRate) {
     }
 
     public static of(
         date: EnforcementDate,
-        item: TargetItem,
+        item: Specification<TargetItemCandidate>,
         rate: SalesTaxRate): ReducedTax {
             return new ReducedTax(date, item, rate);
     }

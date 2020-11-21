@@ -1,17 +1,15 @@
 import { Specification } from "../../../shared/support/specification";
-import { TargetItemCandidate } from "./target-item-candidate";
 
 /**
  * 対象なんでもおｋ
  */
-export class TargetAny
-    extends Specification<TargetItemCandidate> {
+export class TargetAny<T> extends Specification<T> {
 
-    public static of(): TargetAny {
-        return new TargetAny();
+    public static of<T>(): TargetAny<T> {
+        return new TargetAny<T>();
     }
 
-    public isSatisfiedBy(candidate: TargetItemCandidate): boolean {
+    public isSatisfiedBy(t: T): boolean {
         return true;
     }
 

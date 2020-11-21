@@ -1,12 +1,10 @@
 import { Specification } from "../../../shared/support/specification";
-import { TargetItemCandidate } from "./target-item-candidate";
 import { ContractType } from "../../contract/contract-type";
 
 /**
  * 対象契約区分
  */
-export class TargetContractType
-    extends Specification<TargetItemCandidate> {
+export class TargetContractType extends Specification<ContractType> {
 
     private constructor(private readonly contract: ContractType) {
         super();
@@ -16,8 +14,8 @@ export class TargetContractType
         return new TargetContractType(ContractType.of(contract));
     }
 
-    public isSatisfiedBy(candidate: TargetItemCandidate): boolean {
-        const result = this.contract.equal(candidate.contract);
+    public isSatisfiedBy(contract: ContractType): boolean {
+        const result = this.contract.equal(contract);
         return result;
     }
 
