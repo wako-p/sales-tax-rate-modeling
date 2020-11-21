@@ -1,21 +1,17 @@
 
-export interface ICompositeSpecification<T> {
-    isSatisfiedBy(candidate: T): boolean;
-}
-
-export abstract class CompositeSpecification<T> implements ICompositeSpecification<T> {
+export abstract class CompositeSpecification<T> implements CompositeSpecification<T> {
 
     public abstract isSatisfiedBy(candidate: T): boolean;
 
-    public and(spec: ICompositeSpecification<T>): AndSpecification<T> {
+    public and(spec: CompositeSpecification<T>): CompositeSpecification<T> {
         return new AndSpecification(this, spec);
     }
 
-    public or(spec: ICompositeSpecification<T>): OrSpecification<T> {
+    public or(spec: CompositeSpecification<T>): CompositeSpecification<T> {
         return new OrSpecification(this, spec);
     }
 
-    public not(): NotSpecification<T> {
+    public not(): CompositeSpecification<T> {
         return new NotSpecification(this);
     }
 
@@ -24,8 +20,8 @@ export abstract class CompositeSpecification<T> implements ICompositeSpecificati
 class AndSpecification<T> extends CompositeSpecification<T> {
 
     public constructor(
-        private readonly spec1: ICompositeSpecification<T>,
-        private readonly spec2: ICompositeSpecification<T>) {
+        private readonly spec1: CompositeSpecification<T>,
+        private readonly spec2: CompositeSpecification<T>) {
             super();
     }
 
@@ -42,8 +38,8 @@ class AndSpecification<T> extends CompositeSpecification<T> {
 class OrSpecification<T> extends CompositeSpecification<T> {
 
     public constructor(
-        private readonly spec1: ICompositeSpecification<T>,
-        private readonly spec2: ICompositeSpecification<T>) {
+        private readonly spec1: CompositeSpecification<T>,
+        private readonly spec2: CompositeSpecification<T>) {
             super();
     }
 
@@ -60,7 +56,7 @@ class OrSpecification<T> extends CompositeSpecification<T> {
 class NotSpecification<T> extends CompositeSpecification<T> {
 
     public constructor(
-        private readonly spec: ICompositeSpecification<T>) {
+        private readonly spec: CompositeSpecification<T>) {
             super();
     }
 

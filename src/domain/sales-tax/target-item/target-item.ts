@@ -1,4 +1,4 @@
-import { CompositeSpecification, ICompositeSpecification } from "../../../shared/support/composite-specification";
+import { CompositeSpecification } from "../../../shared/support/composite-specification";
 import { TargetItemCandidate } from "./target-item-candidate";
 
 /**
@@ -7,11 +7,11 @@ import { TargetItemCandidate } from "./target-item-candidate";
 export class TargetItem extends CompositeSpecification<TargetItemCandidate> {
 
     private constructor(
-        private readonly spec: ICompositeSpecification<TargetItemCandidate>) {
+        private readonly spec: CompositeSpecification<TargetItemCandidate>) {
             super();
     }
 
-    public static of(spec: ICompositeSpecification<TargetItemCandidate>): TargetItem {
+    public static of(spec: CompositeSpecification<TargetItemCandidate>): TargetItem {
         return new TargetItem(spec);
     }
 
