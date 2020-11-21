@@ -1,11 +1,11 @@
-import { CompositeSpecification } from "../../../shared/support/composite-specification";
+import { Specification } from "../../../shared/support/specification";
 import { TargetItemCandidate } from "./target-item-candidate";
 
 /**
  * 対象なんでもおｋ
  */
 export class TargetAny
-    extends CompositeSpecification<TargetItemCandidate> {
+    extends Specification<TargetItemCandidate> {
 
     public static of(): TargetAny {
         return new TargetAny();

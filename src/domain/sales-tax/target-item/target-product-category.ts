@@ -1,4 +1,4 @@
-import { CompositeSpecification } from "../../../shared/support/composite-specification";
+import { Specification } from "../../../shared/support/specification";
 import { TargetItemCandidate } from "./target-item-candidate";
 import { ProductCategory } from "../../product/product-category";
 
@@ -6,7 +6,7 @@ import { ProductCategory } from "../../product/product-category";
  * 対象商品カテゴリ
  */
 export class TargetProductCategory
-    extends CompositeSpecification<TargetItemCandidate> {
+    extends Specification<TargetItemCandidate> {
 
     private constructor(private readonly category: ProductCategory) {
         super();
