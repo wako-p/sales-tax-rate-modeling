@@ -6,15 +6,19 @@ import { TargetItemCandidate } from "../../../../src/domain/sales-tax/target-ite
 
 describe(`${TargetItem.name}`, () => {
 
-    const target = TargetItem.of(
-        TargetContractType.of(`不定期`)
-            .and(TargetProductCategory.of(`飲食料品`))
-            .and(TargetProvideType.of(`譲渡`).or(TargetProvideType.of(`宅配`)))
+    const target =
+        // 不定期 && 飲食料品 && (譲渡 || 宅配)
+        TargetItem.of(
+            TargetContractType.of(`不定期`),
+            TargetProductCategory.of(`飲食料品`),
+            TargetProvideType.of(`譲渡`).or(TargetProvideType.of(`宅配`)))
         .or(
-        TargetContractType.of(`定期`)
-            .and(TargetProductCategory.of(`新聞`))
-            .and(TargetProvideType.of(`宅配`)))
-    );
+        // 定期 && 新聞 && 宅配
+        TargetItem.of(
+            TargetContractType.of(`定期`),
+            TargetProductCategory.of(`新聞`),
+            TargetProvideType.of(`宅配`))
+        );
 
     describe(`isSatisfiedBy()`, () => {
         test.each([

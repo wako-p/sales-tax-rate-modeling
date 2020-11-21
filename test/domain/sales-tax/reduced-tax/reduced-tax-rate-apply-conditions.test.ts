@@ -14,13 +14,17 @@ describe(`${ReducedTaxRateApplyConditions.name}`, () => {
     const conditions = new ReducedTaxRateApplyConditions([
         ReducedTax.of(
             EnforcementDate.of(2019, 10, 1),
+            // 不定期 && 飲食料品 && (譲渡 || 宅配)
             TargetItem.of(
-                TargetContractType.of(`不定期`)
-                    .and(TargetProductCategory.of(`飲食料品`))
-                    .and(TargetProvideType.of(`譲渡`).or(TargetProvideType.of(`宅配`))).or(
-                TargetContractType.of(`定期`)
-                    .and(TargetProductCategory.of(`新聞`))
-                    .and(TargetProvideType.of(`宅配`)))
+                TargetContractType.of(`不定期`),
+                TargetProductCategory.of(`飲食料品`),
+                TargetProvideType.of(`譲渡`).or(TargetProvideType.of(`宅配`)))
+            .or(
+            // 定期 && 新聞 && 宅配
+            TargetItem.of(
+                TargetContractType.of(`定期`),
+                TargetProductCategory.of(`新聞`),
+                TargetProvideType.of(`宅配`))
             ),
             SalesTaxRate.of(0.08)
         )

@@ -1,5 +1,5 @@
 
-@startuml v1.0
+@startuml selas-tax-rate-modeling
 
 package usecase.xxx {
     class xxxUsecase
@@ -122,16 +122,25 @@ package domain {
 
         package 対象品目 {
 
-            class 対象品目
-            class 対象契約区分
-            class 対象商品カテゴリ
-            class 対象提供区分
+            class 対象品目<対象品目候補>
             class 対象品目候補
+            class 対象契約区分<契約区分>
+            class 対象提供区分<提供区分>
+            class 対象商品カテゴリ<商品カテゴリ>
 
             shared.support.合成仕様 <|--up-- 対象品目
             shared.support.合成仕様 <|--up-- 対象契約区分
             shared.support.合成仕様 <|--up-- 対象提供区分
             shared.support.合成仕様 <|--up-- 対象商品カテゴリ
+
+            対象品目 --> 対象契約区分
+            対象品目 --> 対象提供区分
+            対象品目 --> 対象商品カテゴリ
+            対象品目 .> 対象品目候補
+
+            対象品目候補 --> 契約区分
+            対象品目候補 --> 提供区分
+            対象品目候補 --> 商品カテゴリ
 
             対象契約区分 --> 契約区分
             対象提供区分 --> 提供区分
@@ -144,13 +153,11 @@ package domain {
 
 package shared.support {
 
-    interface 合成仕様IF
-    class 合成仕様
-    class AND仕様
-    class OR仕様
-    class NOT仕様
+    class 合成仕様<T>
+    class AND仕様<T>
+    class OR仕様<T>
+    class NOT仕様<T>
 
-    合成仕様IF <|.. 合成仕様
     合成仕様 <|-- AND仕様
     合成仕様 <|-- OR仕様
     合成仕様 <|-- NOT仕様

@@ -9,43 +9,55 @@ import { TargetProvideType } from "../../../../src/domain/sales-tax/target-item/
 import { SalesTaxRate } from "../../../../src/domain/sales-tax/sales-tax-rate";
 import { ContractDate } from "../../../../src/domain/contract/contract-date";
 import { TargetItemCandidate } from "../../../../src/domain/sales-tax/target-item/target-item-candidate";
+import { ContractType } from "../../../../src/domain/contract/contract-type";
+import { ProductCategory } from "../../../../src/domain/product/product-category";
+import { ProvideType } from "../../../../src/domain/contract/provide-type";
 
 describe(`${StandardTaxRateApplyConditions.name}`, () => {
 
+    // 標準税率適用条件
     const conditions = new StandardTaxRateApplyConditions([
         StandardTax.of(
-            EnforcementDate.of(1989,  4, 1),
+            EnforcementDate.of(1989, 4, 1),
             TargetItem.of(
-                TargetAny.of()
+                TargetAny.of<ContractType>(),
+                TargetAny.of<ProductCategory>(),
+                TargetAny.of<ProvideType>()
             ),
             SalesTaxRate.of(0.03)
         ),
         StandardTax.of(
-            EnforcementDate.of(1997,  4, 1),
+            EnforcementDate.of(1997, 4, 1),
             TargetItem.of(
-                TargetAny.of()
+                TargetAny.of<ContractType>(),
+                TargetAny.of<ProductCategory>(),
+                TargetAny.of<ProvideType>()
             ),
             SalesTaxRate.of(0.05)
         ),
         StandardTax.of(
-            EnforcementDate.of(2014,  4, 1),
+            EnforcementDate.of(2014, 4, 1),
             TargetItem.of(
-                TargetAny.of()
+                TargetAny.of<ContractType>(),
+                TargetAny.of<ProductCategory>(),
+                TargetAny.of<ProvideType>()
             ),
             SalesTaxRate.of(0.08)
         ),
         StandardTax.of(
             EnforcementDate.of(2019, 10, 1),
+            // 不定期 && 飲食料品 && (譲渡 || 宅配)
             TargetItem.of(
-                TargetContractType.of(`不定期`)
-                    .and(TargetProductCategory.of(`飲食料品`))
-                    .and(TargetProvideType.of(`譲渡`).or(TargetProvideType.of(`宅配`)))
-                .or(
-                TargetContractType.of(`定期`)
-                    .and(TargetProductCategory.of(`新聞`))
-                    .and(TargetProvideType.of(`宅配`)))
-                .not()
-            ),
+                TargetContractType.of(`不定期`),
+                TargetProductCategory.of(`飲食料品`),
+                TargetProvideType.of(`譲渡`).or(TargetProvideType.of(`宅配`)))
+            .or(
+            // 定期 && 新聞 && 宅配
+            TargetItem.of(
+                TargetContractType.of(`定期`),
+                TargetProductCategory.of(`新聞`),
+                TargetProvideType.of(`宅配`))
+            ).not(),
             SalesTaxRate.of(0.10)
         )
     ]);
