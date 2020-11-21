@@ -1,4 +1,4 @@
-import { CompositeSpecification } from "../../../shared/support/composite-specification";
+import { Specification } from "../../../shared/support/specification";
 import { TargetItemCandidate } from "./target-item-candidate";
 import { ProvideType } from "../../contract/provide-type";
 
@@ -6,7 +6,7 @@ import { ProvideType } from "../../contract/provide-type";
  * 対象提供区分
  */
 export class TargetProvideType
-    extends CompositeSpecification<TargetItemCandidate> {
+    extends Specification<TargetItemCandidate> {
 
     private constructor(private readonly provide: ProvideType) {
         super();

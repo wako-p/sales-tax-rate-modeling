@@ -1,4 +1,4 @@
-import { CompositeSpecification } from "../../../shared/support/composite-specification";
+import { Specification } from "../../../shared/support/specification";
 import { TargetItemCandidate } from "./target-item-candidate";
 import { ContractType } from "../../contract/contract-type";
 
@@ -6,7 +6,7 @@ import { ContractType } from "../../contract/contract-type";
  * 対象契約区分
  */
 export class TargetContractType
-    extends CompositeSpecification<TargetItemCandidate> {
+    extends Specification<TargetItemCandidate> {
 
     private constructor(private readonly contract: ContractType) {
         super();

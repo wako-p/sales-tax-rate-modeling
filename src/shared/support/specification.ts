@@ -1,31 +1,27 @@
 
-export interface ICompositeSpecification<T> {
-    isSatisfiedBy(candidate: T): boolean;
-}
-
-export abstract class CompositeSpecification<T> implements ICompositeSpecification<T> {
+export abstract class Specification<T> implements Specification<T> {
 
     public abstract isSatisfiedBy(candidate: T): boolean;
 
-    public and(spec: ICompositeSpecification<T>): AndSpecification<T> {
+    public and(spec: Specification<T>): Specification<T> {
         return new AndSpecification(this, spec);
     }
 
-    public or(spec: ICompositeSpecification<T>): OrSpecification<T> {
+    public or(spec: Specification<T>): Specification<T> {
         return new OrSpecification(this, spec);
     }
 
-    public not(): NotSpecification<T> {
+    public not(): Specification<T> {
         return new NotSpecification(this);
     }
 
 }
 
-class AndSpecification<T> extends CompositeSpecification<T> {
+class AndSpecification<T> extends Specification<T> {
 
     public constructor(
-        private readonly spec1: ICompositeSpecification<T>,
-        private readonly spec2: ICompositeSpecification<T>) {
+        private readonly spec1: Specification<T>,
+        private readonly spec2: Specification<T>) {
             super();
     }
 
@@ -39,11 +35,11 @@ class AndSpecification<T> extends CompositeSpecification<T> {
 
 }
 
-class OrSpecification<T> extends CompositeSpecification<T> {
+class OrSpecification<T> extends Specification<T> {
 
     public constructor(
-        private readonly spec1: ICompositeSpecification<T>,
-        private readonly spec2: ICompositeSpecification<T>) {
+        private readonly spec1: Specification<T>,
+        private readonly spec2: Specification<T>) {
             super();
     }
 
@@ -57,10 +53,10 @@ class OrSpecification<T> extends CompositeSpecification<T> {
 
 }
 
-class NotSpecification<T> extends CompositeSpecification<T> {
+class NotSpecification<T> extends Specification<T> {
 
     public constructor(
-        private readonly spec: ICompositeSpecification<T>) {
+        private readonly spec: Specification<T>) {
             super();
     }
 

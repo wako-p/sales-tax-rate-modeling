@@ -1,17 +1,17 @@
-import { CompositeSpecification, ICompositeSpecification } from "../../../shared/support/composite-specification";
+import { Specification } from "../../../shared/support/specification";
 import { TargetItemCandidate } from "./target-item-candidate";
 
 /**
  * 対象品目
  */
-export class TargetItem extends CompositeSpecification<TargetItemCandidate> {
+export class TargetItem extends Specification<TargetItemCandidate> {
 
     private constructor(
-        private readonly spec: ICompositeSpecification<TargetItemCandidate>) {
+        private readonly spec: Specification<TargetItemCandidate>) {
             super();
     }
 
-    public static of(spec: ICompositeSpecification<TargetItemCandidate>): TargetItem {
+    public static of(spec: Specification<TargetItemCandidate>): TargetItem {
         return new TargetItem(spec);
     }
 
